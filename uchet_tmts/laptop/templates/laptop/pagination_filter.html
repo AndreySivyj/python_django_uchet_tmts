@@ -1,0 +1,66 @@
+{% load reeestr_tmts_extras %}
+
+<!-- pagination starts -->
+<nav aria-label="...">
+    <ul class="pagination flex-wrap justify-content-center">
+      <li class="page-item disabled">
+        {% if dataset.has_previous %}
+          <li class="page-item">
+            {% comment %} <a class="page-link" href="{{ request.path }}?page={{ dataset.previous_page_number }}">⇇</a> {% endcomment %}
+            <a class="page-link" href="{% reestr_tmts_url dataset.previous_page_number 'page' request.GET.urlencode %}">⇇</a>
+          </li>
+        {% endif %}
+        {% if dataset.number > 3 %}
+          <li class="page-item">
+            {% comment %} <a class="page-link" href="{{ request.path }}?page=1">1</a> {% endcomment %}
+            <a class="page-link" href="{% reestr_tmts_url 1 'page' request.GET.urlencode %}">1</a>
+          </li>
+        {% endif %}
+        {% if dataset.number > 4 %}
+            <li class="page-item">
+            <span class="page-link">....</span>
+            </li>
+        {% endif %}
+      </li>
+
+      {% for i in dataset.paginator.page_range %}
+        {% if dataset.number == i %}
+          <li class="page-item active">
+            <span class="page-link">
+              {{ i }}
+              <span class="sr-only"></span>
+            </span>
+          </li>
+          {% elif i > dataset.number|add:'-3' and i < dataset.number|add:'3' %}
+            <li class="page-item">
+              {% comment %} <a class="page-link" href="{{ request.path }}?page={{ i }}">{{ i }}</a> {% endcomment %}
+              <a class="page-link" href="{% reestr_tmts_url i 'page' request.GET.urlencode %}">{{ i }}</a>
+            </li>
+        {% endif %}
+      {% endfor %}
+
+      {% if dataset.has_next %}
+        {% if dataset.number < dataset.paginator.num_pages|add:'-3' %}
+            <li class="page-item">
+                <span class="page-link">....</span>
+            </li>
+            <li class="page-item">
+                {% comment %} <a class="page-link" href="?page={{ dataset.paginator.num_pages }}">{{ dataset.paginator.num_pages }}</a> {% endcomment %}
+                <a class="page-link" href="{% reestr_tmts_url dataset.paginator.num_pages 'page' request.GET.urlencode %}">{{ dataset.paginator.num_pages }}</a>
+            </li>
+        {% elif dataset.number < dataset.paginator.num_pages|add:'-2' %}
+            <li class="page-item">
+                {% comment %} <a class="page-link" href="?page={{ dataset.paginator.num_pages }}">{{ dataset.paginator.num_pages }}</a> {% endcomment %}
+                <a class="page-link" href="{% reestr_tmts_url dataset.paginator.num_pages 'page' request.GET.urlencode %}">{{ dataset.paginator.num_pages }}</a>
+            </li>
+        {% endif %}  
+        <li class="page-item">
+          {% comment %} <a class="page-link" href="?page={{ dataset.next_page_number }}"> ⇉</a> {% endcomment %}
+          <a class="page-link" href="{% reestr_tmts_url dataset.next_page_number 'page' request.GET.urlencode %}"> ⇉</a>
+        </li>
+      {% endif %}
+    </ul>
+  </nav>
+  <!-- pagination end -->
+
+

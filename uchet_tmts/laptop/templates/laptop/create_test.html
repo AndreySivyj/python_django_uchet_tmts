@@ -1,0 +1,33 @@
+{% extends "laptop/base.html" %}
+{% load crispy_forms_tags %}
+
+
+{% block title %}{{ title_text }}{% endblock title %}
+
+{% block header %}{{ title_text }}{% endblock header %}
+
+{% block body %}
+{% comment %} <div class="container-fluid bg-body-tertiary rounded my-3 py-3">    
+    <a class="btn btn-lg btn-primary" href="{% url url_return_to_the_list %}" role="button">Вернуться к списку записей &raquo;</a>
+</div> {% endcomment %}
+
+<div class="container-fluid bg-body-tertiary rounded my-3 py-3">
+    
+    {% comment %} {% include 'laptop/messages.html' %} {% endcomment %}
+
+    <form method = "post">
+        {% csrf_token %}
+        {{ form|crispy }}
+        {% comment %} <input type = "hidden" name="creator_account" value = "{{user_login}}"> {% endcomment %}
+        <input type = "submit" class="submitbutton_create" name="submit" value = "Добавить">
+    </form>
+</div>
+
+{% endblock body %}
+
+{% block scripts %}
+<script>
+    $("#id_name_TMTS").select2();
+    $("#id_owner_TMTS").select2();
+</script>
+{% endblock scripts %}

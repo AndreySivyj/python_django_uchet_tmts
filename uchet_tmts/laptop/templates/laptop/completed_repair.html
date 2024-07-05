@@ -1,0 +1,33 @@
+{% extends "laptop/base.html" %}
+
+{% block title %}{{ title_text }}{% endblock title %}
+
+{% block header %}{{ title_text }}{% endblock header %}
+
+{% block body %}
+
+<div class="container-fluid bg-body-tertiary rounded my-3 py-3">      
+    <a class="btn btn-lg btn-primary" href="{% url url_return_to_the_list %}" role="button">Вернуться к списку записей &raquo;</a>
+</div>
+
+<div class="container-fluid bg-body-tertiary rounded my-3 py-3">
+    
+    {% include 'laptop/messages.html' %}
+
+    <form method = "post">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <div class="col-6 ">
+            <h3>Подтвердите выполнение работ</h3>
+        </div>
+        <div class="col-6 ">
+            <input type = "submit" class="submitbutton_delete" name="submit" class="superbutton" name="submit" value="Да">
+        <a class="btn btn-lg btn-info" href="{% url url_return_to_the_list %}">Нет</a>
+        </div>
+
+        {% comment %} <input type = "submit" class="submitbutton_update" name="submit" value = "Изменить" aria-describedby="inputGroup-sizing-sm"> {% endcomment %}
+    </form>
+</div>
+
+{% endblock body %}

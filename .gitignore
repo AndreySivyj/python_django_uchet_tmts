@@ -1,0 +1,11 @@
+py_venv/
+media
+__pycache__
+*.bak
+*.log
+*.pot
+*.pyc
+db.sqlite3
+uchet_tmts/media/
+uchet_tmts/json_dump_DB/
+uchet_tmts/db.sqlite3

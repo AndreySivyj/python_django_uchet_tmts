@@ -1,0 +1,15 @@
+{# laptop/reestr_tmts.html #}
+{% load render_table from django_tables2 %}
+{% load static %}
+<!doctype html>
+<html>
+    <head>
+        <title>List of reestr_tmts</title>
+        {% comment %} <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /> {% endcomment %}
+        <link rel="stylesheet" href="/static/css/bootstrap_.min.css" >
+    </head>
+    <body>
+        {% comment %} {% render_table object_list %} {% endcomment %}
+        {% render_table table %}
+    </body>
+</html>

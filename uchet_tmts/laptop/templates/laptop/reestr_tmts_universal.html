@@ -1,0 +1,56 @@
+{% extends "laptop/base.html" %}
+
+{% comment %} {% block search_block %}
+    <li><a class="dropdown-item" href="{% url 'reestr_tmts_list' %}">Начальная (базовая) область поиска в AD</a></li>
+        <li>
+            <hr class="dropdown-divider">
+        </li>
+{% endblock search_block %} {% endcomment %}
+
+{% block title %}{{ title_text }}{% endblock title %}
+
+{% block header %}{{ title_text }}, [всего: {{ dataset.count }}]{% endblock header %}
+
+{% block body %}
+<div class="container-fluid">   
+    <div class="row mb-2">
+        <div class="col-4 align-self-center">
+            <a class="btn btn-lg btn-primary" href="{% url 'reestr_tmts_create' %}" role="button">Добавить новую запись &raquo;</a>
+        </div>
+
+        <div class="col-4 align-self-center">
+            <form action="{% url 'reestr_tmts_search_list' %}" method="get">
+                <input name="search_query" type="text" placeholder="Поиск..." >
+            </form>
+        </div>
+
+        <div class="col-4 align-self-center">
+            <a class="btn btn-lg btn-success" href="{% url 'export_reestr_tmts_xls'%}" role="button">Экспорт в xls  &raquo;</a>
+        </div>
+    </div>
+
+    <div class="row">
+        {% include 'laptop/messages.html' %}
+
+        <table class="table table-striped table-bordered text-start">
+               
+                <tr>
+                    {% for item in model_headers %}
+                        <th>{{ item }}</th>
+                    {% endfor %}
+                </tr>
+                
+                {% for all_rows in query_results %}
+                <tr>
+                    {% for every_colomn in all_rows %}
+                        <td>{{ every_colomn }}</td>
+                    {% endfor %}
+                </tr>
+                {% empty %}
+                    <h2>Справочник "{{ title_text }}" пуст</h2>
+                {% endfor %}                
+        </table>
+        
+    </div>   
+
+{% endblock body %}

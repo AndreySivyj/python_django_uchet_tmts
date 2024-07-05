@@ -1,0 +1,24 @@
+{% extends "laptop/base.html" %}
+
+{% block title %}Ремонт/обслуживание ТМЦ (добавление записи){% endblock title %}
+
+{% block header %}Ремонт/обслуживание ТМЦ (добавление записи){% endblock header %}
+
+{% block body %}
+{% comment %} <div class="container-fluid bg-body-tertiary rounded my-3 py-3">    
+    <a class="btn btn-lg btn-primary" href="{% url url_return_to_the_list %}" role="button">Вернуться к списку записей &raquo;</a>
+</div> {% endcomment %}
+
+<div class="container-fluid bg-body-tertiary rounded my-3 py-3">
+    
+    {% include 'laptop/messages.html' %}
+
+    <form method = "post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        {% comment %} <input type = "hidden" name="creator_account" value = "{{user_login}}"> {% endcomment %}
+        <input type = "submit" class="submitbutton_create" name="submit" value = "Добавить">
+    </form>
+</div>
+
+{% endblock body %}

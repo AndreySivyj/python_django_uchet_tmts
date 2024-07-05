@@ -1,0 +1,48 @@
+{% extends "laptop/base.html" %}
+
+{% block title %}{{ title_text }}{% endblock title %}
+
+{% block header %}{{ title_text }}{% endblock header %}
+
+{% block body %}  
+{% comment %} <div class="container-fluid bg-body-tertiary rounded my-3 py-3">    
+    <a class="btn btn-lg btn-primary" href="{% url 'responsible_tmts_list' %}" role="button">Вернуться к списку записей &raquo;</a>
+</div> {% endcomment %}
+
+<div class="container-fluid bg-body-tertiary rounded my-3 py-3">
+    <table class="table table-striped table-bordered text-start">
+        <thead>
+            <tr>
+                {% comment %} <th>№</th> {% endcomment %}
+                <th>ФИО</th>
+                <th>Учетная запись</th>
+                <th>Email</th>
+                <th>Имя объекта</th>
+                <th>Юридическое лицо</th>
+                <th>Должность</th>                
+                <th>Телефон (мобильный)</th>
+                <th>Телефон</th>
+                {% comment %} <th>Действия над записями</th> {% endcomment %}
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                {% comment %} <td>{{ data.id }}</td> {% endcomment %}
+                <td>{{ data.fio }}</td>
+                <td>{{ data.account }}</td>
+                <td>{{ data.email }}</td>
+                <td>{{ data.distingished_name }}</td>
+                <td>{{ data.company }}</td>
+                <td>{{ data.company_position }}</td>
+                <td>{{ data.mobile }}</td>
+                <td>{{ data.telephone_number }}</td>
+                <td>                                    
+                    {% comment %} <a class="btn btn-sm btn-warning" href="{% url 'responsible_tmts_update' id=data.id %}">Изменить  &raquo;</a>
+                    <a class="btn btn-sm btn-danger" href="{% url 'responsible_tmts_delete' id=data.id %}">Удалить  &raquo;</a> {% endcomment %}
+                </td>
+            </tr>
+        </tbody>
+    </table>        
+</div>
+
+{% endblock body %}

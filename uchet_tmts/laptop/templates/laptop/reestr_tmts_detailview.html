@@ -1,0 +1,63 @@
+{% extends "laptop/base.html" %}
+
+{% block title %}{{ title_text }}{% endblock title %}
+
+{% block header %}{{ title_text }}{% endblock header %}
+
+{% block body %}  
+<div class="container-fluid bg-body-tertiary rounded my-3 py-3">    
+    <a class="btn btn-lg btn-primary" href="{% url 'reestr_tmts_list' %}" role="button">Вернуться к списку записей &raquo;</a>
+</div>
+
+<div class="container-fluid bg-body-tertiary rounded my-3 py-3">
+
+    {% include 'laptop/messages.html' %}
+    
+    <table class="table table-striped table-bordered text-start">
+        <thead>
+            <tr>
+                <th>№</th>
+                <th>Статус</th>
+                <th>Владелец ТМЦ</th>
+                <th>Тип оборудования | Производитель | Модель</th>
+                <th>S/N</th>
+                <th>Ответственный за ТМЦ</th>                        
+                <th>Локация/Кабинет</th>
+                <th>Кем изменено/создано</th>
+                <th>Комментарий</th>    
+                <th>Дата начала эксплуатации ТМЦ</th>    
+                <th>Действия над записями</th>
+                <th>Операции с оборудованием</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ data.id }}</td>
+                <td>{{ data.status }}</td>{% comment %} <td>{{ data.get_status_display }}</td> {% endcomment %}
+                <td>{{ data.owner_TMTS }}</td>
+                <td>{{ data.name_TMTS }}</td>
+                <td>{{ data.serial_number }}</td>
+                <td>{{ data.responsible_TMTS|default_if_none:"" }}</td>                
+                <td>{{ data.location }}</td>
+                <td>{{ data.creator_account }}</td>
+                <td>{{ data.comment }}</td>
+                <td>{{ data.start_of_operation_TMTS|default_if_none:""|date }}</td>
+                <td>                                    
+                    {% comment %} <a class="btn btn-sm btn-warning" href="{% url 'reestr_tmts_update' id=data.id %}">Изменить  &raquo;</a>
+                    <a class="btn btn-sm btn-danger" href="{% url 'reestr_tmts_delete' id=data.id %}">Удалить  &raquo;</a> {% endcomment %}
+                </td>
+                <td>    
+                    {% comment %} {% if data.status != 2 %}     {% endcomment %}
+                        <a class="btn btn-sm btn-info" href="{% url 'reestr_tmts_repair_add_entry' tmts_id=data.id %}" role="button">В ремонт  &raquo;</a>
+                        {% comment %} <a class="btn btn-sm btn-info" href="{% url 'reestr_tmts_repair_create' id=data.id %}" role="button">В ремонт  &raquo;</a> {% endcomment %}
+                    {% comment %} {% endif %} {% endcomment %}
+                    <form method="post">
+                        <a class="btn btn-sm btn-secondary" href="{% url 'reestr_tmts_return_to_sklad' id=data.id %}">На склад  &raquo;</a>
+                    </form>  
+                </td>  
+            </tr>
+        </tbody>
+    </table>        
+</div>
+
+{% endblock body %}

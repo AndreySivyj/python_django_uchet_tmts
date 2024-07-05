@@ -1,0 +1,82 @@
+{% extends "laptop/base.html" %}
+
+{% block title %}{{ title_text }}{% endblock title %}
+
+{% block header %}{{ title_text }}, [всего: {{ count_dataset }}]{% endblock header %}
+
+{% block body %}
+<div class="container-fluid">   
+    <div class="row mb-2">
+        
+
+        <div class="col-6 align-self-center">
+            <form action="{% url 'responsible_tmts_search_list' %}" method="get">
+                <input name="search_query" type="text" placeholder="Поиск..." >
+            </form>
+        </div>
+
+        {% comment %} <div class="col-3 align-self-center">
+            <a class="btn btn-lg btn-success" href="{% url 'export_reestr_tmts_xls'%}" role="button">Экспорт в xls  &raquo;</a>
+        </div> {% endcomment %}
+
+        
+    </div>
+
+    {% comment %} <div class="container-fluid bg-body-tertiary my-3 py-3"> {% endcomment %}
+    <div class="row">        
+
+        {% if count_dataset > 0 %} 
+            {% include "laptop/pagination.html"  %}       
+
+            <table class="table table-striped table-bordered text-start">
+                <thead>
+                    <tr>
+                        {% comment %} <th>№</th> {% endcomment %}
+                        <th>Сформировать список ТМЦ</th>
+                        <th>ФИО</th>
+                        <th>Учетная запись</th>
+                        <th>Email</th>
+                        <th>Имя объекта</th>
+                        <th>Юридическое лицо</th>
+                        <th>Должность</th>
+                        <th>Телефон (мобильный)</th>
+                        <th>Телефон</th>
+                        {% comment %} <th>Действия над записями</th> {% endcomment %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for data in dataset %} <!-- отображает сведения о введенных данных -->
+                        <tr>
+                            {% comment %} <td>{{ data.id }}</td> {% endcomment %}
+                            <td>
+                                <a class="btn btn-sm btn-info" href="{% url 'responsible_tmts_get_reestr_tmts' id=data.id %}">Список ТМЦ  &raquo;</a>
+                            </td>
+                            <td>{{ data.fio }}</td>
+                            <td>{{ data.account }}</td>
+                            <td>{{ data.email }}</td>
+                            <td>{{ data.distingished_name }}</td>
+                            <td>{{ data.company }}</td>
+                            <td>{{ data.company_position }}</td>
+                            <td>{{ data.mobile }}</td>
+                            <td>{{ data.telephone_number }}</td>
+                            {% comment %} <td>                                    
+                                <a class="btn btn-sm btn-warning" href="{% url 'responsible_tmts_get_reestr_tmts' id=data.id %}">Изменить  &raquo;</a>
+                                <a class="btn btn-sm btn-danger" href="{% url 'responsible_tmts_delete' id=data.id %}">Удалить  &raquo;</a>
+                            </td> {% endcomment %}
+                        </tr>
+                    {% empty %}
+                        <h2>Справочник "{{ title_text }}" пуст</h2>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            {% include "laptop/pagination.html"  %}
+            
+        {% else %}
+            <h2>Справочник "{{ title_text }}" пуст</h2>
+        {% endif %}        
+    </div>
+
+</div>    
+
+{% endblock body %}

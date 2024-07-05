@@ -1,0 +1,17 @@
+{% extends "app_auth_users/base_app_auth.html" %}
+
+
+{% block title %}Авторизация пользователя{% endblock title %}
+
+{% block header %}Авторизация пользователя{% endblock header %}
+
+
+{% block body %}
+
+<form method="post">
+    {% csrf_token %} 
+    {{ form.as_p }}    
+    <button type="submit" class="btn btn-lg btn-info">Login</button>    
+</form>
+
+{% endblock %}

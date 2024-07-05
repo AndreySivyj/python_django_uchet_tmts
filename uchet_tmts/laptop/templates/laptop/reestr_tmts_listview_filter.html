@@ -1,0 +1,208 @@
+{% extends "laptop/base.html" %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+
+{% comment %} {% block search_block %}
+    <li><a class="dropdown-item" href="{% url 'reestr_tmts_list' %}">Начальная (базовая) область поиска в AD</a></li>
+        <li>
+            <hr class="dropdown-divider">
+        </li>
+{% endblock search_block %} {% endcomment %}
+
+{% block title %}{{ title_text }}{% endblock title %}
+
+{% block header %}{{ title_text }}, [всего: {{ count_dataset }}]{% endblock header %}
+
+{% block body %}
+<div class="container-fluid">   
+    <div class="row mb-2">
+        <div class="col-3 align-self-center">
+            <a class="btn btn-lg btn-primary" href="{% url 'reestr_tmts_create' %}" role="button">Добавить новую запись &raquo;</a>
+        </div>
+
+        {% comment %} <div class="col-3 align-self-center">
+            <form action="{% url 'reestr_tmts_search_list' %}" method="get">
+                <input name="search_query" type="text" placeholder="Поиск..." >
+            </form>
+        </div> {% endcomment %}
+
+        <div class="col-3 align-self-center">
+            {% comment %} <a class="btn btn-lg btn-info" href="{% url 'reestr_tmts_list_filter'%}" role="button">Фильтрация  &raquo;</a> {% endcomment %}
+            <a class="btn btn-lg btn-info" href="{% url 'reestr_tmts_list_filter'%}?{{ request.GET.urlencode }}" role="button">Фильтрация  &raquo;</a>
+        </div>
+
+        <div class="col-3 align-self-center">
+            {% comment %} <a class="btn btn-lg btn-success" href="{% url 'export_reestr_tmts_xls'%}" role="button">Экспорт в xls  &raquo;</a> {% endcomment %}
+            <a class="btn btn-lg btn-success" href="{% url 'export_reestr_tmts_xls_filter'%}?{{ request.GET.urlencode }}" role="button">Экспорт в xls  &raquo;</a>
+        </div>
+
+        <div class="col-3 align-self-center">
+            <a class="btn btn-lg btn-outline-warning" href="{% url 'reestr_tmts_archived_list'%}" role="button">Утилизация  &raquo;</a>
+        </div>
+        
+    </div>
+
+    {% comment %} <div class="container-fluid bg-body-tertiary my-3 py-3"> {% endcomment %}
+    <div class="row">
+
+        {% include 'laptop/messages.html' %}
+        
+    <!-- <div class="container-fluid bg-light text-white text-start my-2 py-4"> -->
+
+        {% if count_dataset > 0 %}    
+
+            {% include "laptop/pagination_filter.html"  %}
+            
+
+            <table class="table table-striped table-bordered text-start">
+                <thead>
+                    <tr>
+                        <th>№</th>
+
+                        <th>Действия над записями</th>
+                        <th>Операции с оборудованием</th>
+
+                        <th>Статус</th>
+                        <th>Владелец ТМЦ</th>
+                        <th>Тип оборудования | Производитель | Модель</th>
+                        <th>S/N</th>
+                        <th>Ответственный за ТМЦ</th>                        
+                        <th>Локация/Кабинет</th>
+                        <th>Кем изменено/создано</th>
+                        <th>Комментарий</th>        
+                        <th>Дата начала эксплуатации ТМЦ</th>
+                        <th>Длительность эксплуатации (дней)</th>
+                        
+                    </tr>
+
+                    <tr>
+                        <form method="get"><!-- class="popup" -->
+                            <th>
+                                
+                            </th>
+        
+                            <th><button type="submit" class="btn btn-primary">Фильтровать</button></th>
+                            <th></th>
+                            <th>
+                                {% comment %} <div>{{ filter.form.status.label_tag }}</div> {% endcomment %}
+                                {% render_field filter.form.status  %}<!-- class="form-conrol" -->
+                            </th>
+                            <th>
+                                {% comment %} <div>{{ filter.form.owner_TMTS.label_tag }}</div> {% endcomment %}
+                                {% render_field filter.form.owner_TMTS  %}<!-- class="form-conrol" -->
+                            </th>
+                            <th>
+                                {% comment %} <div>{{ filter.form.name_TMTS.label_tag }}</div> {% endcomment %}
+                                {% render_field filter.form.name_TMTS  %}<!-- class="form-conrol" -->
+                            </th>
+                            <th>
+                                {% comment %} <div>{{ filter.form.serial_number.label_tag }}</div> {% endcomment %}
+                                {% render_field filter.form.serial_number  %}<!-- class="form-conrol" -->
+                            </th>
+                            <th>
+                                {% comment %} <div>{{ filter.form.responsible_TMTS.label_tag }}</div> {% endcomment %}
+                                {% render_field filter.form.responsible_TMTS  %}<!-- class="form-conrol" -->
+                            </th>                        
+                            <th>
+                                {% comment %} <div>{{ filter.form.location.label_tag }}</div> {% endcomment %}
+                                {% render_field filter.form.location  %}<!-- class="form-conrol" -->
+                            </th>
+                            <th>
+                                {% render_field filter.form.creator_account  %}
+                            </th>
+                            <th>
+                                {% comment %} <div>{{ filter.form.comment.label_tag }}</div> {% endcomment %}
+                                {% render_field filter.form.comment  %}<!-- class="form-conrol" -->
+                            </th>        
+                            <th></th>
+                            <th></th>
+                            
+                        </form>
+                    </tr>
+
+                    
+                    
+                </thead>
+                <tbody>
+                    {% for data in dataset %} <!-- отображает сведения о введенных данных        filter.qs -->
+                        <tr>
+                            <td>{{ data.id }}</td>
+
+                            <td>                                    
+                                <a class="btn btn-sm btn-warning" href="{% url 'reestr_tmts_update' id=data.id %}">Изменить  &raquo;</a>
+                                <a class="btn btn-sm btn-danger" href="{% url 'reestr_tmts_delete' id=data.id %}">Удалить  &raquo;</a>
+                            </td>
+                            <td>
+                                {% if data.status.id != 2 %} 
+                                    <a class="btn btn-sm btn-info" href="{% url 'reestr_tmts_repair_add_entry' tmts_id=data.id %}" role="button">В ремонт  &raquo;</a>
+                                {% comment %} {% else %}
+                                <button type="button" class="btn btn-sm btn-info" href="{% url 'reestr_tmts_repair_add_entry' tmts_id=data.id %}" disabled>В ремонт  &raquo;<button/> {% endcomment %}
+                                    
+                                {% endif %}
+
+                                    {% comment %} <a class="btn btn-sm btn-info" href="{% url 'reestr_tmts_repair_add_entry' tmts_id=data.id %}" role="button">В ремонт  &raquo;</a> {% endcomment %}
+                                    
+                                    
+
+
+                                    
+                                    {% comment %} <a class="btn btn-sm btn-info" href="{% url 'reestr_tmts_repair_create' tmts_id=data.id %}" role="button">В ремонт  &raquo;</a> {% endcomment %}
+                                    
+                                    {% comment %} <a class="btn btn-sm btn-info" href="{% url 'reestr_tmts_repair_create' id=data.id %}" role="button">В ремонт  &raquo;</a> {% endcomment %}
+                                {% comment %} {% endif %} {% endcomment %}
+                                {% if data.status.id == 1 %} 
+                                <form method="post">
+                                    <a class="btn btn-sm btn-secondary" href="{% url 'reestr_tmts_return_to_sklad' id=data.id %}">На склад  &raquo;</a>  
+                                </form>
+                                {% endif %}
+                            </td>
+
+                            <td>
+                                {% if data.status.id == 2 %} 
+                                    <span style="color: red">{{ data.status }}</span>
+                                {% elif data.status.id == 3 %}
+                                    <span style="color: #339900">{{ data.status }}</span>
+                                {% else %}
+                                    {{ data.status }}
+                                {% endif %}
+                            </td>{% comment %} <td>{{ data.get_status_display }}</td> {% endcomment %}
+                            <td>{{ data.owner_TMTS }}</td>
+                            <td>{{ data.name_TMTS }}</td>
+                            <td>{{ data.serial_number }}</td>
+                            <td>{{ data.responsible_TMTS|default_if_none:"" }}</td>                
+                            <td>{{ data.location }}</td>
+                            <td>{{ data.creator_account }}</td>
+                            <td>{{ data.comment }}</td>
+                            <td>{{ data.start_of_operation_TMTS|default_if_none:""|date }}</td>
+                            <td>{{ data.delta_data.days }}</td>
+                              
+                        </tr>
+                    {% empty %}
+                        <h2>Реестр "{{ title_text }}" пуст</h2>
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+            {% include "laptop/pagination_filter.html"  %}
+            
+            
+        {% else %}
+            <h2>Реестр "{{ title_text }}" пуст</h2>
+        {% endif %}
+    </div>
+
+</div>    
+     
+{% endblock body %}
+
+{% block scripts %}
+<script>    
+    $("#id_owner_TMTS").select2({ width:'100%'});
+    $("#id_name_TMTS").select2({ width:'100%'});    
+    $("#id_responsible_TMTS").select2({ width:'100%'});
+    $("#id_creator_account").select2({ width:'100%'});
+</script>
+{% endblock scripts %}
+
+{% comment %} {% block user_login %}<h5><span style="color: #6600FF">Авторизация: {{user_login}}</span></h5>{% endblock user_login %}  {% endcomment %}
+

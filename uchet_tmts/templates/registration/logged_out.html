@@ -1,0 +1,15 @@
+{% extends "base_project.html" %}
+
+
+{% block title %}Выход из системы{% endblock title %}
+
+{% block header %}Выход из системы{% endblock header %}
+
+
+{% block body %}
+
+    <h4>Вы вышли из системы!</h4>
+
+    <a class="btn btn-lg btn-primary" href="{% url 'login' %}" role="button">Нажмите для входа в систему &raquo;</a>
+
+{% endblock %}

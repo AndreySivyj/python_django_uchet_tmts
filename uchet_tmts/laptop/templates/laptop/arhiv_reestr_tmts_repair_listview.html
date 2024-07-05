@@ -1,0 +1,96 @@
+{% extends "laptop/base.html" %}
+
+{% block title %}{{ title_text }}{% endblock title %}
+
+{% block header %}{{ title_text }}, [всего: {{ dataset.paginator.count }}] {% endblock header %}
+
+{% block body %}
+<div class="container-fluid">   
+
+    {% if options == True %}
+    <div class="row mb-2">
+        {% comment %} <div class="col-6 align-self-center">
+            <a class="btn btn-lg btn-success" href="{% url 'reestr_tmts_create' %}" role="button">Добавить новую запись &raquo;</a>
+        </div> {% endcomment %}
+
+        
+        <div class="col-6 align-self-center">
+            <a class="btn btn-lg btn-success" href="{% url 'export_reestr_arhiv_tmts_repair_xls'%}" role="button">Экспортировать все записи из БД в xls  &raquo;</a>
+        </div>
+
+        <div class="col-6 align-self-center">
+            <form action="{% url 'reestr_arhiv_tmts_repair_search_list' %}" method="get">
+                <input name="search_query" type="text" placeholder="Поиск..." >
+            </form>
+        </div>
+
+    </div>
+    {% endif %}
+
+    {% comment %} <div class="container-fluid bg-body-tertiary my-3 py-3"> {% endcomment %}
+    <div class="row">
+
+        {% include 'laptop/messages.html' %}
+        
+    <!-- <div class="container-fluid bg-light text-white text-start my-2 py-4"> -->
+        {% if dataset.paginator.count > 0 %}
+
+            {% include "laptop/pagination.html"  %}
+        
+            <table class="table table-striped table-bordered text-start">
+                <thead>
+                    <tr>
+                        <th>№</th>
+                        <th>id записи</th>
+                        <th>id ТМЦ</th>                        
+                        <th>ТМЦ</th>
+                        <th>Учетная запись ответственного за ремонт/обслуживание</th>
+                        <th>Ответственный за ремонт/обслуживание</th>                        
+                        <th>Дата регистрации</th>
+                        <th>Кем изменено/создано</th>
+                        <th>Дата изменения</th>
+                        <th>Комментарий</th>
+                        {% comment %} <th>Переведен в архив</th> {% endcomment %}
+                        <th>Дата действия</th>
+                        <th>Действие</th>
+                        <th>Кем выполнено</th>
+                        <th>Загруженные изображения</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for data in dataset %} <!-- отображает сведения о введенных данных -->
+                        <tr>
+                            <td>{{ data.id }}</td>
+                            <td>{{ data.id_reestr_tmts_repair }}</td>
+                            <td>{{ data.id_reestr_tmts }}</td>
+                            <td>{{ data.reestr_TMTS }}</td>
+                            <td>{{ data.username_responsible_TMTS_repair }}</td>
+                            <td>{{ data.responsible_TMTS_repair|default_if_none:"" }}</td>
+                            <td>{{ data.created_reestr_tmts_repair }}</td>
+                            <td>{{ data.creator_account }}</td>
+                            <td>{{ data.updated_reestr_tmts_repair }}</td>
+                            <td>{{ data.comment }}</td>
+                            {% comment %} <td>{{ data.archived }}</td> {% endcomment %}
+                            <td>{{ data.created }}</td>
+                            <td>{{ data.action }}</td>
+                            <td>{{ data.creator_action }}</td>   
+                            <td>
+                                <a class="btn btn-sm btn-info" href="{% url 'reestr_image_tmts_repair_get_by_id' id=data.id_reestr_tmts_repair %}">Изображения &raquo;</a> 
+                            </td>                          
+                        </tr>
+                    {% empty %}
+                        <h2>Реестр "{{ title_text }}" пуст</h2>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            {% include "laptop/pagination.html"  %}
+
+        {% else %}
+            <h2>Реестр "{{ title_text }}" пуст</h2>
+        {% endif %}
+    </div>
+
+    
+
+{% endblock body %}

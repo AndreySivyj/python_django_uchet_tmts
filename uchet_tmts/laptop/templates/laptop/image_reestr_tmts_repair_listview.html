@@ -1,0 +1,89 @@
+{% extends "laptop/base.html" %}
+
+
+{% block title %}{{ title_text }}{% endblock title %}
+
+{% block header %}{{ title_text }}:<br>{{ title_text_tmts }}, [всего: {{ count_dataset }}]{% endblock header %}
+
+{% block body %}
+<div class="container-fluid">   
+    <div class="row mb-2">
+        <div class="col-6 align-self-center">  
+            
+            <a class="btn btn-lg btn-primary" href="{% url 'reestr_image_tmts_repair_create' id=id_tmts_repair %}" role="button">Добавить новую запись &raquo;</a>
+        </div>
+
+        <div class="col-6 align-self-center">
+            <a class="btn btn-lg btn-info" href="{% url 'reestr_tmts_repair_list' %}" role="button">Вернуться к списку записей &raquo;</a>
+        </div>
+
+
+        {% comment %}<div class="col-3 align-self-center">
+            <form action="{% url 'reestr_tmts_search_list' %}" method="get">
+                <input name="search_query" type="text" placeholder="Поиск..." >
+            </form>
+        </div>
+
+        <div class="col-3 align-self-center">
+            <a class="btn btn-lg btn-success" href="{% url 'export_reestr_tmts_xls'%}" role="button">Экспорт в xls  &raquo;</a>
+        </div>
+
+        <div class="col-3 align-self-center">
+            <a class="btn btn-lg btn-outline-warning" href="{% url 'reestr_tmts_archived_list'%}" role="button">Архивные записи  &raquo;</a>
+        </div>{% endcomment %}
+    </div>
+
+    {% comment %} <div class="container-fluid bg-body-tertiary my-3 py-3"> {% endcomment %}
+    <div class="row">
+
+        {% include 'laptop/messages.html' %}
+        
+   
+
+        {% if count_dataset > 0 %}    
+            {% include "laptop/pagination.html"  %}
+
+            <table class="table table-striped table-bordered text-start">
+                <thead>
+                    <tr>
+                        <th>Дата добавления</th>
+                        <th>ТМЦ<br>(Владелец | Наименование | SN | Ответственный)</th>
+                        <th>Описание</th>
+                        <th>Изображение</th>                        
+                        
+                    </tr>                    
+                </thead>
+                <tbody>
+                    {% for data in dataset %} <!-- отображает сведения о введенных данных -->
+                        <tr>
+                            <td>{{ data.created }}</td>
+                            <td>{{ data.reestr_repair_TMTS }}</td>                            
+                            <td>{{ data.image_comment }}</td>
+                            <td>
+                                <a href="{{data.picture.url}}" target="_blank">
+                                    <img ismap src="{{data.picture.url}}" width="100%" height="100%" alt="{{data.picture.name}}">
+                                </a>
+                            </td>
+                                                        
+                            
+                            
+                        </tr>
+                    {% empty %}
+                        <h2>Реестр "{{ title_text }}" пуст</h2>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            {% include "laptop/pagination.html"  %}
+            
+        {% else %}
+            <h2>Реестр "{{ title_text }}" пуст</h2>
+        {% endif %}
+    </div>
+
+    
+     
+{% endblock body %}
+
+{% comment %} {% block user_login %}<h5><span style="color: #6600FF">Авторизация: {{user_login}}</span></h5>{% endblock user_login %}  {% endcomment %}
+

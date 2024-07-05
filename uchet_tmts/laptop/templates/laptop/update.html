@@ -1,0 +1,36 @@
+{% extends "laptop/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}{{ title_text }}{% endblock title %}
+
+{% block header %}{{ title_text }}{% endblock header %}
+
+{% block body %}
+
+<div class="container-fluid bg-body-tertiary rounded my-3 py-3">      
+    <a class="btn btn-lg btn-primary" href="{% url url_return_to_the_list %}" role="button">Вернуться к списку записей &raquo;</a>
+</div>
+
+<div class="container-fluid bg-body-tertiary rounded my-3 py-3">
+    
+    {% include 'laptop/messages.html' %}
+
+    <form method = "post">
+        {% csrf_token %}
+
+        {{ form|crispy }} {% comment %} {{ form.as_p }}{% endcomment %}
+
+        <input type = "submit" class="submitbutton_update" name="submit" value = "Изменить" aria-describedby="inputGroup-sizing-sm">
+    </form>
+</div>
+
+{% endblock body %}
+
+{% block scripts %}
+<script>
+    $("#id_type_TMTS").select2({ width:'100%'});
+    $("#id_name_TMTS").select2({ width:'100%'});
+    $("#id_owner_TMTS").select2({ width:'100%'});
+    $("#id_responsible_TMTS_repair").select2({ width:'100%'});
+</script>
+{% endblock scripts %}

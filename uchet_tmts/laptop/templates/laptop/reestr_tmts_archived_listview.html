@@ -1,0 +1,165 @@
+{% extends "laptop/base.html" %}
+
+{% block title %}{{ title_text }}{% endblock title %}
+
+{% block header %}{{ title_text }}, [всего: {{ count_dataset }}]{% endblock header %}
+{% comment %} dataset.count {% endcomment %}
+
+{% block body %}
+<div class="container-fluid">   
+    <div class="row mb-2">
+
+        <div class="col-4 align-self-center">
+            <form action="{% url 'reestr_tmts_archived_search_list' %}" method="get">
+                <input name="search_query" type="text" placeholder="Поиск..." >
+            </form>
+        </div>
+
+        <div class="col-4 align-self-center">
+            <a class="btn btn-lg btn-success" href="{% url 'export_reestr_tmts_archived_xls'%}" role="button">Экспорт в xls  &raquo;</a>
+        </div>
+
+        <div class="col-4 align-self-center">
+            <a class="btn btn-lg btn-outline-primary" href="{% url 'reestr_tmts_list'%}" role="button">Учет ТМЦ  &raquo;</a>
+        </div>
+
+        {% comment %} <div class="col-3 align-self-center">
+            <a class="btn btn-lg btn-outline-warning" href="{% url 'reestr_tmts_archived_list'%}" role="button">Архивные записи  &raquo;</a>
+        </div> {% endcomment %}
+    </div>
+
+    {% comment %} <div class="container-fluid bg-body-tertiary my-3 py-3"> {% endcomment %}
+    <div class="row">
+
+        {% include 'laptop/messages.html' %}
+        
+    <!-- <div class="container-fluid bg-light text-white text-start my-2 py-4"> -->
+
+        {% if count_dataset > 0 %}
+            {% include "laptop/pagination.html"  %}
+
+            <table class="table table-striped table-bordered text-start">
+                <thead>
+                    <tr>
+                        <th>№</th>
+                        <th>Статус</th>
+                        <th>Владелец ТМЦ</th>
+                        <th>Тип оборудования | Производитель | Модель</th>
+                        <th>S/N</th>
+                        <th>Ответственный за ТМЦ</th>                        
+                        <th>Локация/Кабинет</th>
+                        <th>Кем изменено/создано</th>
+                        <th>Комментарий</th>   
+                        <th>Дата начала эксплуатации ТМЦ</th>     
+                        <th>Действия над записями</th>
+                        {% comment %} <th>Операции с оборудованием</th> {% endcomment %}
+                    </tr>
+
+                    {% comment %} <tr>
+                        <th>	
+                            <form action="{% url 'reestr_tmts_search_list' %}" method="get">
+                            <input name="search_query" type="text" placeholder="Поиск..." >
+                            </form>
+                        </th>
+                        <th>	
+                            <form action="{% url 'reestr_tmts_search_list' %}" method="get">
+                            <input name="search_query" type="text" placeholder="Поиск..." >
+                            </form>
+                        </th>
+                        <th>	
+                            <form action="{% url 'reestr_tmts_search_list' %}" method="get">
+                            <input name="search_query" type="text" placeholder="Поиск..." >
+                            </form>
+                        </th>
+                        <th>	
+                            <form action="{% url 'reestr_tmts_search_list' %}" method="get">
+                            <input name="search_query" type="text" placeholder="Поиск..." >
+                            </form>
+                        </th>
+                        <th>	
+                            <form action="{% url 'reestr_tmts_search_list' %}" method="get">
+                            <input name="search_query" type="text" placeholder="Поиск..." >
+                            </form>
+                        </th>
+                        <th>	
+                            <form action="{% url 'reestr_tmts_search_list' %}" method="get">
+                            <input name="search_query" type="text" placeholder="Поиск..." >
+                            </form>
+                        </th>                        
+                        <th>	
+                            <form action="{% url 'reestr_tmts_search_list' %}" method="get">
+                            <input name="search_query" type="text" placeholder="Поиск..." >
+                            </form>
+                        </th>
+                        <th>	
+                            <form action="{% url 'reestr_tmts_search_list' %}" method="get">
+                            <input name="search_query" type="text" placeholder="Поиск..." >
+                            </form>
+                        </th>
+                        <th>	
+                            <form action="{% url 'reestr_tmts_search_list' %}" method="get">
+                            <input name="search_query" type="text" placeholder="Поиск..." >
+                            </form>
+                        </th>        
+                        <th>	
+                            
+                        </th>
+                        <th>	
+                            
+                        </th>
+                    </tr> {% endcomment %}
+                    
+                </thead>
+                <tbody>
+                    {% for data in dataset %} <!-- отображает сведения о введенных данных -->
+                        <tr>
+                            <td>{{ data.id }}</td>
+                            <td>
+                                {% if data.status.id == 2 %} 
+                                    <span style="color: red">{{ data.status }}</span>
+                                {% elif data.status.id == 3 %}
+                                    <span style="color: #339900">{{ data.status }}</span>
+                                {% else %}
+                                    {{ data.status }}
+                                {% endif %}
+                            </td>{% comment %} <td>{{ data.get_status_display }}</td> {% endcomment %}
+                            <td>{{ data.owner_TMTS }}</td>
+                            <td>{{ data.name_TMTS }}</td>
+                            <td>{{ data.serial_number }}</td>
+                            <td>{{ data.responsible_TMTS }}</td>                
+                            <td>{{ data.location }}</td>
+                            <td>{{ data.creator_account }}</td>
+                            <td>{{ data.comment }}</td>
+                            <td>{{ data.start_of_operation_TMTS|default_if_none:""|date }}</td>
+                            <td>                                    
+                                <a class="btn btn-sm btn-warning" href="{% url 'reestr_tmts_update' id=data.id %}">Изменить  &raquo;</a>
+                                <a class="btn btn-sm btn-danger" href="{% url 'reestr_tmts_delete' id=data.id %}">Удалить  &raquo;</a>
+                            </td>
+                            {% comment %} <td>
+                                {% if data.status.id != 2 %} 
+                                    <a class="btn btn-sm btn-info" href="{% url 'reestr_tmts_repair_add_entry' tmts_id=data.id %}" role="button">В ремонт  &raquo;</a>
+                                {% endif %}
+
+                                {% if data.status.id == 1 %} 
+                                <form method="post">
+                                    <a class="btn btn-sm btn-secondary" href="{% url 'reestr_tmts_return_to_sklad' id=data.id %}">На склад  &raquo;</a>  
+                                </form>
+                                {% endif %}
+                            </td>   {% endcomment %}
+                        </tr>
+                    {% empty %}
+                        <h2>Реестр "{{ title_text }}" пуст</h2>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            {% include "laptop/pagination.html"  %}
+            
+        {% else %}
+            <h2>Реестр "{{ title_text }}" пуст</h2>
+        {% endif %}
+    </div>
+
+    
+
+{% endblock body %}
